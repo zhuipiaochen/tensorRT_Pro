@@ -292,7 +292,13 @@ namespace FFHDDecoder{
                 return false;
             }
             m_nPicNumInDecodeOrder[pPicParams->CurrPicIdx] = m_nDecodePicCnt++;
-            checkCudaDriver(cuvidDecodePicture(m_hDecoder, pPicParams));
+            //修改有的录像文件解析报错导致python层crash的问题
+            try{
+                checkCudaDriver(cuvidDecodePicture(m_hDecoder, pPicParams));
+            }catch(...){
+                return false;
+            }
+            //checkCudaDriver(cuvidDecodePicture(m_hDecoder, pPicParams));
             return 1;
         }
 
